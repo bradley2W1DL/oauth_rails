@@ -1,1 +1,7 @@
 .claude/
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+log/
+storage/development.sqlite3
+tmp/
