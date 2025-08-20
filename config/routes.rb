@@ -7,4 +7,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  
+  ## Oauth Routes
+  get "authorize" => "oauth#authorize"
+  post "oauth/token" => "oauth#token", as: :oauth_token
+  get "introspect" => "oauth#introspect"
+  post "oauth/revoke" => "oauth#revoke", as: :oauth_revoke
+
+  get ".well-known/oauth-authorization-server" => "application#well_known_authorization_server", as: :well_known_oauth_authorization_server
 end
