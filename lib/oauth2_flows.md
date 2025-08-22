@@ -48,7 +48,7 @@ sequenceDiagram
 
 ---
 
-## 2. Implicit Grant
+## 2. Implicit Grant - DEPRECATED
 
 **Use Case**: Browser-based applications (SPAs) - **DEPRECATED in OAuth 2.1**
 **Security Level**: Medium - no client authentication, token exposed in URI
@@ -89,9 +89,9 @@ sequenceDiagram
 
 ---
 
-## 3. Resource Owner Password Credentials Grant
+## 3. Resource Owner Password Credentials Grant - DEPRECATED
 
-**Use Case**: Highly trusted clients only (first-party applications)
+**Use Case**: Highly trusted clients only (first-party applications) **DEPRECATED in OAuth 2.1**
 **Security Level**: Low - requires sharing user credentials with client
 
 ```mermaid
