@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  include ActiveModle::SecurePassword
+  include ActiveModel::SecurePassword
 
   has_secure_password
 end
