@@ -43,9 +43,6 @@ group :development, :test do
   gem "brakeman", require: false
 
   gem "standard"
-end
-
-group :test do
   gem "rspec"
   gem "rspec-rails"
 end
