@@ -3,6 +3,8 @@ class OauthController < ApplicationController
   def authorize
     # This action would handle the OAuth authorization request.
     # It typically involves redirecting the user to a login page or displaying an authorization form.
+    #   - This would need to check for an existing "session token" or JWT in the request.
+    #   - if already logged in just redirect back, otherwise show login page first
     render json: {message: "Authorization endpoint"}
   end
 
