@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  # this should probably live on the oauth controller...very specific to that
   def well_known_authorization_server
     render json: {
       issuer: Rails.application.routes.url_helpers.root_url,
@@ -12,5 +13,9 @@ class ApplicationController < ActionController::API
       token_endpoint_auth_methods_supported: %w[client_secret_post],
       subject_types_supported: %w[public pairwise]
     }
+  end
+
+  def current_user
+    @current_user ||= User.joins(:sessions).find_by(user_sessions: { token: session[:session_token] })
   end
 end
