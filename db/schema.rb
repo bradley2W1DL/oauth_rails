@@ -14,7 +14,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_052223) do
   create_table "authorization_codes", force: :cascade do |t|
     t.integer "client_id", null: false
     t.integer "user_id", null: false
-    t.integer "session_id", null: false
+    t.integer "user_session_id", null: false
     t.text "redirect_uri"
     t.json "scope"
     t.text "code_challenge"
@@ -22,11 +22,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_052223) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_authorization_codes_on_client_id"
-    t.index ["session_id"], name: "index_authorization_codes_on_session_id"
     t.index ["user_id"], name: "index_authorization_codes_on_user_id"
+    t.index ["user_session_id"], name: "index_authorization_codes_on_user_session_id"
   end
 
-  create_table "client_applications", force: :cascade do |t|
+  create_table "clients", force: :cascade do |t|
     t.string "name"
     t.string "client_id"
     t.string "client_secret"
@@ -40,7 +40,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_052223) do
     t.text "token"
     t.integer "client_id", null: false
     t.integer "user_id", null: false
-    t.integer "session_id", null: false
+    t.integer "user_session_id", null: false
     t.json "scope"
     t.datetime "issued_at"
     t.datetime "expires_at"
@@ -49,8 +49,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_052223) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_refresh_tokens_on_client_id"
-    t.index ["session_id"], name: "index_refresh_tokens_on_session_id"
     t.index ["user_id"], name: "index_refresh_tokens_on_user_id"
+    t.index ["user_session_id"], name: "index_refresh_tokens_on_user_session_id"
   end
 
   create_table "user_consents", force: :cascade do |t|
@@ -87,10 +87,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_052223) do
   end
 
   add_foreign_key "authorization_codes", "clients"
-  add_foreign_key "authorization_codes", "sessions"
+  add_foreign_key "authorization_codes", "user_sessions"
   add_foreign_key "authorization_codes", "users"
   add_foreign_key "refresh_tokens", "clients"
-  add_foreign_key "refresh_tokens", "sessions"
+  add_foreign_key "refresh_tokens", "user_sessions"
   add_foreign_key "refresh_tokens", "users"
   add_foreign_key "user_consents", "clients"
   add_foreign_key "user_consents", "users"
