@@ -1,9 +1,7 @@
 class SessionsController < ApplicationController
   def login
     # check if session is already present in a cookie (how does rails handle setting and viewing cookies?)
-    session_present = false
-    
-    if session_present
+    if current_user.present?
       # perform a lookup of the user_session based on cookie and pass this to consent...or will this still be
       # attached to the request?  Maybe need to include client_id to check if THIS user has consented to THIS client
       redirect_to consent_path
