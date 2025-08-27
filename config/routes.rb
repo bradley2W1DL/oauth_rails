@@ -6,15 +6,21 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", :as => :rails_health_check
 
   # Defines the root path route ("/")
-  # root ""
+  # root path...basic "homepage" with ability for an app to register itself...?
 
-  resources :users
+  # resources :users
+  
+  ## Session Routes
+  get "login" => "sessions#login"
+  post "create_session" => "sessions#create"
+  post "sign_out" => "sessions#destroy"
 
   ## Oauth Routes
   get "authorize" => "oauth#authorize"
-  post "oauth/token" => "oauth#token", :as => :oauth_token
+  get "consent" => "oauth#user_consent"
+  post "oauth/token" => "oauth#token", as: :oauth_token
   get "introspect" => "oauth#introspect"
-  post "oauth/revoke" => "oauth#revoke", :as => :oauth_revoke
+  post "oauth/revoke" => "oauth#revoke", as: :oauth_revoke
 
   get ".well-known/oauth-authorization-server" => "application#well_known_authorization_server", :as => :well_known_oauth_authorization_server
 end
