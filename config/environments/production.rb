@@ -43,7 +43,22 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Replace the default in-process memory cache store with a durable alternative.
-  # config.cache_store = :mem_cache_store
+  config.cache_store = :redis_cache_store, {
+    url: ENV.fetch("REDIS_CACHE_URL"),
+    connect_timeout: 3, # Lower timeout for quick failover
+    read_timeout: 1,    # Read should be very fast
+    write_timeout: 1,   # Write should be very fast
+    namespace: "cache:#{Rails.env}", # Isolate production cache
+    compress: true,                   # Compress data to save memory
+    compress_threshold: 1.kilobyte,   # Only compress large entries
+    error_handler: ->(method:, returning:, exception:) {
+      # Custom error handler for monitoring cache issues
+      # E.g., a logging service or Sentry
+      Rails.logger.error "Redis cache error: #{exception.message}"
+    }
+  }
+
+  config.action_controller.perform_caching = true
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
   # config.active_job.queue_adapter = :resque
