@@ -15,23 +15,19 @@ Rails.application.configure do
   # Enable server timing.
   config.server_timing = true
 
-  # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
-  # By default, caching is off. Run `rails dev:cache` to toggle.
   if Rails.root.join("tmp/caching-dev.txt").exist?
-    config.action_controller.perform_caching = false # do I want this?
-    # config.action_controller.enable_fragment_cache_logging = true
-
-    config.cache_store = :redis_cache_store, {
-      url: ENV.fetch("REDIS_CACHE_URL") { "redis://localhost:6379/1" },
-      # Shorter timeouts for local development
-      connect_timeout: 1,
-      read_timeout: 1,
-      write_timeout: 1
-    }
-  else
-    config.action_controller.perform_caching = false
-    config.cache_store = :null_store
+    raise "caching in dev needs to be opted-into: run `rails dev:cache` to toggle"
   end
+  config.action_controller.perform_caching = false # do I want this?
+  config.action_controller.enable_fragment_cache_logging = false # same ? (think this is view caching)
+
+  config.cache_store = :redis_cache_store, {
+    url: ENV.fetch("REDIS_CACHE_URL") { "redis://localhost:6379/1" },
+    connect_timeout: 1,
+    read_timeout: 1,
+    write_timeout: 1
+  }
+
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
