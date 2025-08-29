@@ -16,6 +16,6 @@ class ApplicationController < ActionController::API
   end
 
   def current_user
-    @current_user ||= User.joins(:sessions).find_by(user_sessions: { token: session[:session_token] })
+    @current_user ||= User.joins(:sessions).find_by(user_sessions: {token: session[:session_token]})
   end
 end

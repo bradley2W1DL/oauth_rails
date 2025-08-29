@@ -60,7 +60,7 @@ class OauthController < ApplicationController
       redirect_uri: params[:redirect_uri],
       code_challenge: params[:code_challenge],
       code_challenge_method: params[:code_challenge_method],
-      scope: params[:scope]&.split(" "),
+      scope: params[:scope]&.split(" ")
     )
   end
 end
