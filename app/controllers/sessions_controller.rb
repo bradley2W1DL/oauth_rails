@@ -13,9 +13,11 @@ class SessionsController < ApplicationController
   def create
     # Ultimately just want to check that user exists and password is correct
     # if so, create session, and return cookie, redirecting to /consent
-    user = User.find_by(email: session_params[:username])
+    user = User.find_by(email: params[:username])
 
-    if user&.authenticate(session_params[:password])
+    Rails.logger.info("Looking for user #{params[:username]} --> found? #{user.present?}")
+
+    if user&.authenticate(params[:password])
       user_session = UserSession.create!(
         user:,
         ip_address: request.remote_ip,
@@ -32,14 +34,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    # is current_user a thing here...? could it be
-    # implement this in application controller by looking up user from session cookie
-  end
-
-  private
-
-  def set_user_agent
-    # TODO
-    "Some devise, probably"
+    # could a user ever have multiple sessions? Do we want to destroy them all on logout?
+    UserSession.find_by(token: session[:session_token])&.destroy
   end
 end

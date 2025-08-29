@@ -1,4 +1,4 @@
-class ApplicationController < ActionController::API
+class ApplicationController < ActionController::Base
   # this should probably live on the oauth controller...very specific to that
   def well_known_authorization_server
     render json: {

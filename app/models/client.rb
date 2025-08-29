@@ -2,8 +2,8 @@ class Client < ApplicationRecord
   before_create :generate_id_and_secret
 
   enum :application_type, {
-    public: 0,
-    confidential: 1
+    public_client: 0,
+    confidential_client: 1
   }
 
   private

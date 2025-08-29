@@ -1,4 +1,10 @@
 <main class="container">
+  <% if flash[:error] %>
+    <div class="flash flash--error">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+  
   <h1>Login</h1>
   <h2>To the Auth Server</h2>
 

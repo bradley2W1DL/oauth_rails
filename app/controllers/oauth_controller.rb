@@ -20,9 +20,17 @@ class OauthController < ApplicationController
     # It typically involves redirecting the user to a login page or displaying an authorization form.
     #   - This would need to check for an existing "session token" or JWT in the request.
     #   - if already logged in just redirect back, otherwise show login page first
-    create_auth_code
 
-    render json: {message: "Authorization endpoint"}
+    # TODO validations to make sure required params are present and valid.
+    @client = Client.find_by(client_id: params[:client_id])
+
+    # render nice_errors_path()
+    
+    if params[:response_type] == "code"
+      create_auth_code
+    end
+
+    redirect_to login_path
   end
 
   # POST /oauth/token
@@ -55,8 +63,8 @@ class OauthController < ApplicationController
 
   def create_auth_code
     # create an authorization code and store it in the database
-    @auth_code = AuthorizationCode.create(
-      client_id: params[:client_id],
+    @auth_code = AuthorizationCode.create!(
+      client: @client,
       redirect_uri: params[:redirect_uri],
       code_challenge: params[:code_challenge],
       code_challenge_method: params[:code_challenge_method],
