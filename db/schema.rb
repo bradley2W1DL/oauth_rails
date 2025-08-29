@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_052223) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_29_053500) do
   create_table "authorization_codes", force: :cascade do |t|
     t.integer "client_id", null: false
-    t.integer "user_id", null: false
-    t.integer "user_session_id", null: false
+    t.integer "user_id"
+    t.integer "user_session_id"
     t.text "redirect_uri"
     t.json "scope"
     t.text "code_challenge"
