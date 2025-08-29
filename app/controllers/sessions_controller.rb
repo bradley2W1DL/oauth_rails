@@ -10,12 +10,6 @@ class SessionsController < ApplicationController
     render :login
   end
 
-  # should be an oauth thing...not sessions
-  # def consent
-  #   # params[:session] // pulled straight from cookie orrrr
-  #   # need to know where to redirect to here...always the oauth#code endpoint?
-  # end
-
   def create
     # Ultimately just want to check that user exists and password is correct
     # if so, create session, and return cookie, redirecting to /consent

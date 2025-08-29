@@ -9,7 +9,6 @@ Rails.application.routes.draw do
   # root path...basic "homepage" with ability for an app to register itself...?
 
   # resources :users
-
   ## Session Routes
   get "login" => "sessions#login"
   post "create_session" => "sessions#create"
