@@ -5,7 +5,8 @@ class CreateAuthorizationCodes < ActiveRecord::Migration[8.0]
       t.references :user, null: false, foreign_key: true
       t.references :user_session, null: false, foreign_key: true
       t.text :redirect_uri
-      t.json :scope
+      t.json :scopes
+      t.string :state
       t.text :code_challenge
       t.string :code_challenge_method
 

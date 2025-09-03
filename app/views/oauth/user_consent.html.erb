@@ -1,0 +1,19 @@
+<main class="container">
+  <%# Really Client wants to access authorized API with scopes...API concept not implemented yet %>
+  <h1>Authorize App</h1>
+  <h2><%= @client.name %></h2>
+  <hr>
+  <p>Hi <%= @current_user.email %>, <%= @client.name %> is requesting access to [API]</p>
+
+  <ul>
+    <% @auth_code.scopes.each do |scope| %>
+      <li><%= scope %></li>
+    <% end %>
+  </ul>
+
+  
+  <div class="action-btns">
+    <%= button_to "Accept", consent_decision_path, params: { accept: true } %>
+    <%= button_to "Decline", consent_decision_path, params: { accept: false } %>
+  </div>
+</main>

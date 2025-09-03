@@ -10,17 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_052223) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_03_154733) do
   create_table "authorization_codes", force: :cascade do |t|
     t.integer "client_id", null: false
-    t.integer "user_id", null: false
-    t.integer "user_session_id", null: false
+    t.integer "user_id"
+    t.integer "user_session_id"
     t.text "redirect_uri"
-    t.json "scope"
+    t.json "scopes"
+    t.string "state"
     t.text "code_challenge"
     t.string "code_challenge_method"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "code", default: "000", null: false
     t.index ["client_id"], name: "index_authorization_codes_on_client_id"
     t.index ["user_id"], name: "index_authorization_codes_on_user_id"
     t.index ["user_session_id"], name: "index_authorization_codes_on_user_session_id"
@@ -41,7 +43,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_052223) do
     t.integer "client_id", null: false
     t.integer "user_id", null: false
     t.integer "user_session_id", null: false
-    t.json "scope"
+    t.json "scopes"
     t.datetime "issued_at"
     t.datetime "expires_at"
     t.boolean "revoked", default: false
@@ -56,7 +58,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_052223) do
   create_table "user_consents", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "client_id", null: false
-    t.json "scope"
+    t.json "scopes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_user_consents_on_client_id"
