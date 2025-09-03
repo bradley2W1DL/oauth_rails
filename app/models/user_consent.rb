@@ -8,8 +8,9 @@ class UserConsent < ApplicationRecord
   belongs_to :client
   before_save :sort_scopes
 
-  scope :for_client, ->(client){ where(client:) }
-  scope :with_scopes, ->(scopes = []) { where(scopes: scopes.sort)}
+  scope :for_client, ->(client) { where(client:) }
+  # TODO this scope isn't working as expected
+  scope :with_scopes, ->(scopes = []) { where(scopes: scopes.sort) }
 
   # this will make json comparison easier...hopefully
   def sort_scopes

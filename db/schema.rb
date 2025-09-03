@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_29_053500) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_03_154733) do
   create_table "authorization_codes", force: :cascade do |t|
     t.integer "client_id", null: false
     t.integer "user_id"
@@ -22,6 +22,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_053500) do
     t.string "code_challenge_method"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "code", default: "000", null: false
     t.index ["client_id"], name: "index_authorization_codes_on_client_id"
     t.index ["user_id"], name: "index_authorization_codes_on_user_id"
     t.index ["user_session_id"], name: "index_authorization_codes_on_user_session_id"

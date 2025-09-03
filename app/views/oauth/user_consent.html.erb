@@ -13,7 +13,7 @@
 
   
   <div class="action-btns">
-    <%= button_to "Accept", consent_decision_path, data: { accept: true } %>
-    <%= button_to "Decline", consent_decision_path, data: { accept: false } %>
+    <%= button_to "Accept", consent_decision_path, params: { accept: true } %>
+    <%= button_to "Decline", consent_decision_path, params: { accept: false } %>
   </div>
 </main>

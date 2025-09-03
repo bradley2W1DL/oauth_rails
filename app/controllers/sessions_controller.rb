@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
     if current_user.present?
       # Maybe need to include client_id to check if THIS user has consented to THIS client
       redirect_to consent_path
+      return
     end
 
     render :login
@@ -48,8 +49,8 @@ class SessionsController < ApplicationController
 
     if current_user.present?
       # TODO could this be more efficient?
-      session = @user_session || UserSession.find_by(token: session[:session_token])
-      auth_code.update(user: current_user, user_session: session)
+      user_session = @user_session || UserSession.find_by(token: session[:session_token])
+      auth_code.update(user: current_user, user_session:)
     end
   end
 end

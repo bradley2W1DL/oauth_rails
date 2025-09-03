@@ -28,7 +28,7 @@ class OauthController < ApplicationController
 
     # render nice_errors_path()
     Rails.logger.debug("\n#{__method__} Trace ID: #{@trace_id}\n")
-    
+
     if params[:response_type] == "code"
       create_auth_code
       Rails.cache.write(code_cache_key, @auth_code.id, expires_in: 15.minutes) # long enough expiry?
@@ -70,19 +70,19 @@ class OauthController < ApplicationController
 
     # if user consents exist for a given client, skip to next step / redirect code to the redirect_uri
     # what other flows would go this way, or does this only apply to the "code grant" flow
-    @redirect_url = @auth_code.redirect_url
+    @redirect_url = @auth_code.redirect_uri
     render :user_consent
   end
 
   # POST /consent_decision
   def consent_decision
     # did user accept or decline client consent on scopes?
-    if params[:accepted]
-      current_user.create_user_consent(client: auth_code.client, scopes: auth_code.scopes)
+    if cast_boolean(params[:accept])
+      current_user.consents.create(client: auth_code.client, scopes: auth_code.scopes)
 
-      redirect_to_client
+      redirect_to_client code: auth_code.code, state: auth_code.state
     else
-      # error response -> redirect to uri, but with error messages
+      redirect_to_client error: "they're not that into you, bro", state: auth_code.state
     end
   end
 
@@ -113,12 +113,15 @@ class OauthController < ApplicationController
       state: params[:state],
       code_challenge: params[:code_challenge],
       code_challenge_method: params[:code_challenge_method],
-      scope: params[:scope]&.split(" ")
+      scopes: params[:scope]&.split(" ")
     )
   end
 
-  def redirect_to_client
-    redirect_to auth_code.redirect_uri, code: auth_code.code, state: auth_code.state
+  def redirect_to_client(**params)
+    # may need to URL encode the values here (in "pair")
+    query_params = params.entries.map { |pair| pair.join("=") }.join("&")
+
+    redirect_to "#{auth_code.redirect_uri}?#{query_params}"
   end
 
   def auth_code

@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
-
   describe ".find_by_factor" do
     context "when username matches" do
       it "returns matching user"
