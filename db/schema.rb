@@ -16,7 +16,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_053500) do
     t.integer "user_id"
     t.integer "user_session_id"
     t.text "redirect_uri"
-    t.json "scope"
+    t.json "scopes"
     t.string "state"
     t.text "code_challenge"
     t.string "code_challenge_method"
@@ -42,7 +42,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_053500) do
     t.integer "client_id", null: false
     t.integer "user_id", null: false
     t.integer "user_session_id", null: false
-    t.json "scope"
+    t.json "scopes"
     t.datetime "issued_at"
     t.datetime "expires_at"
     t.boolean "revoked", default: false
