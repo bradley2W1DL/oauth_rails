@@ -34,6 +34,7 @@ module OauthRails
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.log_tags = [:request_id, lambda { |req| "trace_id=#{req.session[:trace_id]}" }]
 
     config.generators.system_tests = :rspec
   end

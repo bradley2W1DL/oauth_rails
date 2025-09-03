@@ -3,6 +3,9 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :sessions, class_name: "UserSession", dependent: :destroy
+  has_many :consents, class_name: "UserConsent", dependent: :destroy
+
+  scope :with_active_session, ->{ joins(:sessions).where("user_sessions.expires_at > ?", Time.current) }
 
   def self.find_by_factor(factor)
     # username or password for the time being
@@ -11,5 +14,9 @@ class User < ApplicationRecord
     raise ActiveRecord::RecordNotFound, "Multiple users found" if users.size > 1
 
     users.last
+  end
+
+  def consented_to?(client, scopes)
+    consents.for_client(client).with_scopes(scopes).any?
   end
 end

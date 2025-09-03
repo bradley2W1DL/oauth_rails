@@ -1,4 +1,6 @@
 class OauthController < ApplicationController
+  after_action :clear_code_cache, only: [:consent_decision]
+
   # GET /authorize
   # @param response_type [String] The type of response expected (e.g., "code" for authorization code flow).
   # @param client_id [String] The client identifier issued to the client during the registration process.
@@ -25,9 +27,11 @@ class OauthController < ApplicationController
     @client = Client.find_by(client_id: params[:client_id])
 
     # render nice_errors_path()
+    Rails.logger.debug("\n#{__method__} Trace ID: #{@trace_id}\n")
     
     if params[:response_type] == "code"
       create_auth_code
+      Rails.cache.write(code_cache_key, @auth_code.id, expires_in: 15.minutes) # long enough expiry?
     end
 
     redirect_to login_path
@@ -55,8 +59,48 @@ class OauthController < ApplicationController
   end
 
   # GET /consent
-  def consent
-    # render the "consent" where user agrees to allow client to acces X scopes
+  def user_consent
+    Rails.logger.debug("\n#{__method__} Trace ID: #{@trace_id}\n")
+
+    @client = auth_code.client
+
+    if current_user.consented_to?(@client, auth_code.scopes)
+      redirect_to_client
+    end
+
+    # if user consents exist for a given client, skip to next step / redirect code to the redirect_uri
+    # what other flows would go this way, or does this only apply to the "code grant" flow
+    @redirect_url = @auth_code.redirect_url
+    render :user_consent
+  end
+
+  # POST /consent_decision
+  def consent_decision
+    # did user accept or decline client consent on scopes?
+    if params[:accepted]
+      current_user.create_user_consent(client: auth_code.client, scopes: auth_code.scopes)
+
+      redirect_to_client
+    else
+      # error response -> redirect to uri, but with error messages
+    end
+  end
+
+  # GET /.well-known/oauth-authorization-server
+  # TODO THIS ENDPOINT IS BROKEN
+  def well_known_authorization_server
+    render json: {
+      issuer: Rails.application.routes.url_helpers.root_url,
+      authorization_endpoint: Rails.application.routes.url_helpers.authorize_url,
+      token_endpoint: Rails.application.routes.url_helpers.token_url,
+      introspection_endpoint: Rails.application.routes.url_helpers.introspect_url,
+      revocation_endpoint: Rails.application.routes.url_helpers.revoke_url,
+      scopes_supported: %w[read write], # TODO flesh this out
+      response_types_supported: %w[code token id_token],
+      grant_types_supported: %w[authorization_code client_credentials refresh_token],
+      token_endpoint_auth_methods_supported: %w[client_secret_post],
+      subject_types_supported: %w[public pairwise]
+    }
   end
 
   private
@@ -66,9 +110,18 @@ class OauthController < ApplicationController
     @auth_code = AuthorizationCode.create!(
       client: @client,
       redirect_uri: params[:redirect_uri],
+      state: params[:state],
       code_challenge: params[:code_challenge],
       code_challenge_method: params[:code_challenge_method],
       scope: params[:scope]&.split(" ")
     )
+  end
+
+  def redirect_to_client
+    redirect_to auth_code.redirect_uri, code: auth_code.code, state: auth_code.state
+  end
+
+  def auth_code
+    @auth_code ||= AuthorizationCode.find_by(id: Rails.cache.fetch(code_cache_key))
   end
 end
