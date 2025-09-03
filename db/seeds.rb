@@ -5,6 +5,7 @@
 
 # Seed an initial user
 User.find_or_create_by!(username: "test@example.com", name: "Mister Test") do |user|
+  user.email = user.username
   user.password = "password"
   user.password_confirmation = "password"
 end
