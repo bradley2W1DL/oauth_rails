@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # tbd...basic "homepage" with ability for an app to register itself...?
   root "home#index"
+  get "sample" => "home#sample"
 
   # resources :users
   ## Session Routes

@@ -65,12 +65,12 @@ class OauthController < ApplicationController
     @client = auth_code.client
 
     if current_user.consented_to?(@client, auth_code.scopes)
-      redirect_to_client
+      redirect_to_client code: auth_code.code, state: auth_code.state
+      return
     end
 
     # if user consents exist for a given client, skip to next step / redirect code to the redirect_uri
     # what other flows would go this way, or does this only apply to the "code grant" flow
-    @redirect_url = @auth_code.redirect_uri
     render :user_consent
   end
 

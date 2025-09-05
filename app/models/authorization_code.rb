@@ -8,6 +8,6 @@ class AuthorizationCode < ApplicationRecord
   private
 
   def generate_code
-    self.code ||= SecureRandom.uuid
+    self.code = SecureRandom.uuid
   end
 end

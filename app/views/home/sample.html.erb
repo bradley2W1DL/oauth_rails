@@ -1,0 +1,15 @@
+<main class="container">
+  <h1>Sample Client app</h1>
+  <p>Test the response from the "/authorize" endpoing</p>
+  <hr>
+
+  <% if params[:code] %>
+    <h2>Authorization Code</h2>
+    <p>
+      This is returned from successful call to /authorize endpoint.<br>
+      This can be exchanged for an access_token with a POST to the /token endpoint.
+    </p>
+    <p>Code: <code><%= params[:code] %></code></p>
+    <p>State: <code><%= params[:state] %></code></p>
+  <% end %>
+</main>
