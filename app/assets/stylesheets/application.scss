@@ -9,5 +9,5 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
-@import "./normalize.css";
-@import ".skeleton.css";
+@use "normalize";
+@use "skeleton";

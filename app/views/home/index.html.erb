@@ -1,7 +1,6 @@
 <main class="container">
-  <h1>hello, and welcome to ORAS!</h1>
-  <p>to test the auth flow out you can use this link:</p>
-  <code>
-    <%= @test_authorize_url %>
-  </code>
+  <h1>Hello, and welcome to ORAS!</h1>
+  <p>to test the authorization code flow out you can use this link:</p>
+
+  <%= link_to "Test /authorize", @test_authorize_url, class: "button button-primary" %>
 </main>
