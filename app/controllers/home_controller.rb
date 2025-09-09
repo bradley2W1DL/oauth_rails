@@ -1,6 +1,14 @@
 class HomeController < ApplicationController
   def index
-    @test_authorize_url = "localhost:3000/authorize?response_type=code&client_id=#{Client.first.client_id}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fsample&scope=read+write&state=xyz"
+    auth_params = {
+      response_type: "code",
+      client_id: sample_client.client_id,
+      redirect_uri: "http://localhost:3000/sample",
+      scope: "read write",
+      state: "xyz"
+    }
+    @sample_client = sample_client
+    @test_authorize_url = authorize_url(auth_params)
 
     render :index
   end
@@ -10,5 +18,11 @@ class HomeController < ApplicationController
     @code = params[:code]
 
     render :sample
+  end
+
+  private
+
+  def sample_client
+    @sample_client ||= Client.first
   end
 end
