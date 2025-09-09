@@ -1,11 +1,11 @@
 class HomeController < ApplicationController
   def index
     auth_params = {
-      response_type: 'code',
+      response_type: "code",
       client_id: sample_client.client_id,
-      redirect_uri: 'http://localhost:3000/sample',
-      scope: 'read write',
-      state: 'xyz',
+      redirect_uri: "http://localhost:3000/sample",
+      scope: "read write",
+      state: "xyz"
     }
     @sample_client = sample_client
     @test_authorize_url = authorize_url(auth_params)
