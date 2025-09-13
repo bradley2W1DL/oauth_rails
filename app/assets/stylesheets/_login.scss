@@ -5,21 +5,24 @@
   --bg-c-1: #a770ef;
   --bg-c-2: #cf8bf3;
   --bg-c-3: #fdb99b;
-  --blob-color-1:; // array of colors to be used with rgba attr later
-  --blob-color-2:;
+  --blob-color-1: 193, 151, 244; // array of colors to be used with rgba attr later
+  --blob-color-2: 231, 112, 239;
   --blob-color-1:;
   --blob-circle-size: 80%;
   --blending: hard-light;
 }
 
 .login-container {
+  .login__form-wrapper {
+    display: none;
+  }
   .gradient {
     &__bg {
       background-c: var(--bg-c-2);
       /* Chrome 10-25, Safari 5.1-6 */
-      background: -webkit-linear-gradient(220deg, var(--bg-c-1), var(--bg-c-2), var(--bg-c-3));
+      // background: -webkit-linear-gradient(220deg, var(--bg-c-1), var(--bg-c-2), var(--bg-c-3));
       /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-      background: linear-gradient(220deg, var(--bg-c-1), var(--bg-c-2), var(--bg-c-3));
+      // background: linear-gradient(220deg, var(--bg-c-1), var(--bg-c-2), var(--bg-c-3));
       width: 100vw;
       height: 100vh;
       position: fixed;
@@ -30,7 +33,31 @@
     }
 
     &__container {
+      // this container holds the svg filter url
+      // filter: url(#goo) blur(40px);
 
+      .blob1, .blob2, .blob3, .blob4, .blob5 {
+        z-index: 1;
+        position: absolute;
+        mix-bliend-mode: var(--blending);
+        width: var(--blob-circle-size);
+        height: var(--blob-circle-size);
+        opacity: 1;
+      }
+      .blob1 {
+        background: radial-gradient(circle at center, rgba(var(--blob-color-1), 0.6) 0, rgba(var(--blob-color-1), 0) 70%) no-repeat;
+        top: calc(50% - var(--blob-circle-size) / 2);
+        left: calc(50% - var(--blob-circle-size) / 2);
+      }
+      .blob2 {
+        background: radial-gradient(circle at center, rgba(var(--blob-color-2), 0.6) 0, rgba(var(--blob-color-2), 0) 50%) no-repeat;
+        top: calc(50% - var(--blob-circle-size) / 2);
+        left: calc(50% - var(--blob-circle-size) / 2);
+
+      }
+      .blob3 {}
+      .blob4 {}
+      .blob5 {}
     }
   }
 }
