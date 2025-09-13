@@ -1,9 +1,15 @@
 // Gradient blob backgorund styles
 
+// define color variables
 :root {
-  --bg-c-1: #fdb99b;
+  --bg-c-1: #a770ef;
   --bg-c-2: #cf8bf3;
-  --bg-c-3: #a770ef;
+  --bg-c-3: #fdb99b;
+  --blob-color-1:; // array of colors to be used with rgba attr later
+  --blob-color-2:;
+  --blob-color-1:;
+  --blob-circle-size: 80%;
+  --blending: hard-light;
 }
 
 .login-container {
