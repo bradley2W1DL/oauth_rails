@@ -1,0 +1,30 @@
+// Gradient blob backgorund styles
+
+:root {
+  --bg-c-1: #fdb99b;
+  --bg-c-2: #cf8bf3;
+  --bg-c-3: #a770ef;
+}
+
+.login-container {
+  .gradient {
+    &__bg {
+      background-c: var(--bg-c-2);
+      /* Chrome 10-25, Safari 5.1-6 */
+      background: -webkit-linear-gradient(220deg, var(--bg-c-1), var(--bg-c-2), var(--bg-c-3));
+      /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      background: linear-gradient(220deg, var(--bg-c-1), var(--bg-c-2), var(--bg-c-3));
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    &__container {
+
+    }
+  }
+}
