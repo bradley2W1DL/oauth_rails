@@ -10,26 +10,24 @@
     <h2>To the Auth Server</h2>
 
     <%= form_with url: "/create_session", method: :post do |form| %>
-      <div class="form__field">
+      <div class="form-field">
         <%= form.label :username %>
         <%= form.text_field :username, autofocus: true, autocomplete: "username" %>
       </div>
-      <div class="form__field">
+      <div class="form-field">
         <%= form.label :password %>
         <%= form.password_field :password, autocomplete: "password" %>
       </div>
 
-      <div class="form__actions">
+      <div class="form-actions">
         <%= form.submit "Login" %>
       </div>
     <% end %>
   </div>
 
   <%# All following classes are for gradient blobs %>
-
   <div class="gradient__bg">
-    <svg></svg>
-
+    <%= render "goo-filter-svg" %>
     <div class="gradient__container">
       <div class="blob1"></div>
       <div class="blob2"></div>
