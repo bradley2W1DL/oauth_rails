@@ -5,9 +5,6 @@
   --bg-c-1: #a770ef;
   --bg-c-2: #cf8bf3;
   --bg-c-3: #fdb99b;
-  // --blob-color-1: 193, 151, 244; // array of colors to be used with rgba attr later
-  // --blob-color-2: 231, 112, 239;
-  // --blob-color-3:;
   --blob-color-1: 112, 120, 239; // lavender
   --blob-color-2: 167, 112, 239; // plum
   --blob-color-3: 231, 112, 239; // pink
@@ -45,8 +42,6 @@
     border-radius: 12px;
     border: 1px solid #fff;
     padding: 2rem;
-    // display: flex;
-    // flex-direction: column;
     .form-field > input, label {
       width: 100%
     }
