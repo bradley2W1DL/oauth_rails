@@ -1,25 +1,40 @@
-<main class="container">
+<main class="container login-container">
   <% if flash[:error] %>
     <div class="flash flash--error">
       <%= flash[:error] %>
     </div>
   <% end %>
   
-  <h1>Login</h1>
-  <h2>To the Auth Server</h2>
+  <div class="login__form-wrapper">
+    <h1>Login</h1>
+    <h2>To the Auth Server</h2>
 
-  <%= form_with url: "/create_session", method: :post do |form| %>
-    <div class="form__field">
-      <%= form.label :username %>
-      <%= form.text_field :username, autofocus: true, autocomplete: "username" %>
-    </div>
-    <div class="form__field">
-      <%= form.label :password %>
-      <%= form.password_field :password, autocomplete: "password" %>
-    </div>
+    <%= form_with url: "/create_session", method: :post do |form| %>
+      <div class="form-field">
+        <%= form.label :username %>
+        <%= form.text_field :username, autofocus: true, autocomplete: "username" %>
+      </div>
+      <div class="form-field">
+        <%= form.label :password %>
+        <%= form.password_field :password, autocomplete: "password" %>
+      </div>
 
-    <div class="form__actions">
-      <%= form.submit "Login" %>
+      <div class="form-actions">
+        <%= form.submit "Login" %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# All following classes are for gradient blobs %>
+  <div class="gradient__bg">
+    <%= render "goo-filter-svg" %>
+    <div class="gradient__container">
+      <div class="blob1"></div>
+      <div class="blob2"></div>
+      <div class="blob3"></div>
+      <div class="blob4"></div>
+      <div class="blob5"></div>
+      <div class="interactive"></div>
     </div>
-  <% end %>
+  </div>
 </main>
