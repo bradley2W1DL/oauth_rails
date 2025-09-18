@@ -24,4 +24,8 @@
   <body>
     <%= yield %>
   </body>
+
+  <%= yield :javascript %>
+
+  <%#= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 </html>
