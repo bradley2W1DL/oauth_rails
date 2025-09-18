@@ -24,10 +24,12 @@ class OauthController < ApplicationController
     #   - if already logged in just redirect back, otherwise show login page first
 
     # TODO validations to make sure required params are present and valid.
+    # this should include requiring a :code_challenge param
+
     @client = Client.find_by(client_id: params[:client_id])
 
     # render nice_errors_path()
-    Rails.logger.debug("\n#{__method__} Trace ID: #{@trace_id}\n")
+    # Rails.logger.debug("\n#{__method__} Trace ID: #{@trace_id}\n")
 
     if params[:response_type] == "code"
       create_auth_code

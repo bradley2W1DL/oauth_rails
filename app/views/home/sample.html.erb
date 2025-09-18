@@ -1,6 +1,7 @@
 <main class="container">
   <h1>Sample Client app</h1>
   <p>Test the response from the "/authorize" endpoint</p>
+  <p>Normally this would be the endoint in the client app</p>
   <hr>
 
   <% if params[:code] %>
@@ -11,5 +12,14 @@
     </p>
     <p>Code: <code><%= params[:code] %></code></p>
     <p>State: <code><%= params[:state] %></code></p>
+
+    <div data-controller="oauth">
+      <input type="text">
+      <button>Greet</button>
+    </div>
+
+    <%# TODO HOTWIRE THIS BISH; need to dynamically pull things from browser session into auth code link %>
+
+    <%#= link_to "POST /token", oauth_token_path(params: { grant_type: "authorization_code", client_id: @client_id }), class: "button button-primary" %>
   <% end %>
 </main>

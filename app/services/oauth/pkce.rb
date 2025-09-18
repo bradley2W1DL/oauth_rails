@@ -9,16 +9,15 @@
 #
 module Oauth
   class Pkce
-    LENGTH = 42
-
+    LENGTH = 50 # arbitrary
     class << self
-      #
-      # generate a random code_verifier string / code_challenge (SHA256) encoded
+      # # #
+      # Generate a random code_verifier string / code_challenge (SHA256) encoded
       # 
-      # @return [verifier String, challenge String]
+      # @return [verifier String, challenge String, challenge_method String]
       def generate_code_verifier_and_challenge
         verifier = SecureRandom.urlsafe_base64(LENGTH)
-        challenge = Base64.encode64(Digest::SHA256.hexdigest(verifier))
+        challenge = Base64.urlsafe_encode64(Digest::SHA256.hexdigest(verifier))
 
         [verifier, challenge, "S256"]
       end
