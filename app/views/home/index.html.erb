@@ -1,16 +1,15 @@
-<main class="container">
+<main
+  class="container" 
+  data-controller="oauth"
+  data-oauth-code-verifier-value="<%= @code_verifier %>"
+  data-oauth-client-id-value="<%= @client.client_id %>"
+  >
+
   <h1>Hello, and welcome to ORAS!</h1>
   <p>to test the authorization code flow out you can use this link:</p>
 
   <%= link_to "Test /authorize", @test_authorize_url, class: "button button-primary" %>
 
   <p>Code Verifier: <code><%= @code_verifier %></code></p>
-</main>
 
-<% content_for :javascript do %>
-  <script>
-    // write @code_verifier into session storage...maybe localStorage
-    // always just write this anew?? (to be used by a later view)
-    sessionStorage.setItem("codeVerifier", "<%= @code_verifier %>");
-  </script>
-<% end %>
+</main>

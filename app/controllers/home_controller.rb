@@ -13,7 +13,7 @@ class HomeController < ApplicationController
       code_challenge: @code_challenge,
       code_challenge_method: @challenge_method,
     }
-    # @sample_client = sample_client
+    @client = sample_client
     @test_authorize_url = authorize_url(auth_params)
 
 

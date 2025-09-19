@@ -5,7 +5,7 @@
   <hr>
 
   <% if params[:code] %>
-    <h2>Authorization Code</h2>
+    <h3>Authorization Code</h2>
     <p>
       This is returned from successful call to /authorize endpoint.<br>
       This can be exchanged for an access_token with a POST to the /token endpoint.
@@ -13,13 +13,20 @@
     <p>Code: <code><%= params[:code] %></code></p>
     <p>State: <code><%= params[:state] %></code></p>
 
-    <div data-controller="oauth">
-      <input type="text">
-      <button>Greet</button>
+    <div data-controller="sample-client">
+      <%= form_with url: oauth_token_path, html: { "data-sample-client-target"=>"form" } do |form| %>
+        <%= form.hidden_field :client_id, "data-sample-client-target"=>"clientId" %>
+        <%= form.hidden_field :code_verifier, "data-sample-client-target"=>"codeVerifier" %>
+        <%= form.hidden_field :grant_type, value: "authorization_code" %>
+        <%= form.hidden_field :code, value: params[:code] %>
+        <%= form.hidden_field :redirect_uri, value: sample_url %>
+        <%= form.submit "POST /token" %>
+      <% end %>
     </div>
+  <% end %>
 
-    <%# TODO HOTWIRE THIS BISH; need to dynamically pull things from browser session into auth code link %>
-
-    <%#= link_to "POST /token", oauth_token_path(params: { grant_type: "authorization_code", client_id: @client_id }), class: "button button-primary" %>
+  <% if params[:access_token] %>
+    <p>render the access token JWT -- response from token call</p>
+    <p>could also implement a JWT decoder in the stimulus controller</p>
   <% end %>
 </main>
