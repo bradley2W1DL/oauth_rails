@@ -4,7 +4,6 @@ export default class extends Controller {
   static targets = ["clientId", "codeVerifier", "form"]
 
   connect() {
-    console.log("we here dawg")
     const clientId = sessionStorage.getItem("clientId")
     const codeVerifier = sessionStorage.getItem("codeVerifier")
 
