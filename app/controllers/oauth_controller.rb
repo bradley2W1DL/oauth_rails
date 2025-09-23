@@ -1,4 +1,5 @@
 class OauthController < ApplicationController
+  include OauthErrorsConcern
   after_action :clear_code_cache, only: [:consent_decision]
 
   # handle exceptions via an included module
@@ -52,9 +53,9 @@ class OauthController < ApplicationController
   #
   # @return [JSON] A JSON response containing the access token and related information. (JWT??)
   def token
-    # todo: should this have a switch statement here for the various flow, or just let the Oauth::AutorizationCode service handle that?
-    Oauth::AuthorizationCode.verify_code!(**token_params)
-    access_token = Oauth::AccessToken.generate!
+    access_token = Oauth::AccessToken.generate_token!(**token_params)
+
+    # todo rescue from errors correctly...need to decide on an error response format (I bet it's in the spec)
 
     render json: {access_token:, token_type: "Bearer", expires_in: access_token.expires_in}, status: :success
   end
