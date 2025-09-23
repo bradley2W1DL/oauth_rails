@@ -56,7 +56,7 @@ class OauthController < ApplicationController
     Oauth::AuthorizationCode.verify_code!(**token_params)
     access_token = Oauth::AccessToken.generate!
 
-    render json: {access_token:, token_type: "Bearer", expires_in: access_token.expires_in }, status: :success
+    render json: {access_token:, token_type: "Bearer", expires_in: access_token.expires_in}, status: :success
   end
 
   # POST /introspect

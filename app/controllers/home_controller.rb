@@ -11,11 +11,10 @@ class HomeController < ApplicationController
       scope: "read write",
       state: "sample-client-request",
       code_challenge: @code_challenge,
-      code_challenge_method: @challenge_method,
+      code_challenge_method: @challenge_method
     }
     @client = sample_client
     @test_authorize_url = authorize_url(auth_params)
-
 
     render :index
   end

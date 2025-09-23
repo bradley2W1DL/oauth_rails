@@ -12,4 +12,3 @@ module Oauth::Errors
     # end
   end
 end
-
