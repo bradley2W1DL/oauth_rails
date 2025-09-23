@@ -1,6 +1,9 @@
 class OauthController < ApplicationController
   after_action :clear_code_cache, only: [:consent_decision]
 
+  # handle exceptions via an included module
+  rescue_from Oauth::Errors::ClientNotFound, with: :client_not_found
+
   # GET /authorize
   # @param response_type [String] The type of response expected (e.g., "code" for authorization code flow).
   # @param client_id [String] The client identifier issued to the client during the registration process.
@@ -24,10 +27,12 @@ class OauthController < ApplicationController
     #   - if already logged in just redirect back, otherwise show login page first
 
     # TODO validations to make sure required params are present and valid.
+    # this should include requiring a :code_challenge param
+
     @client = Client.find_by(client_id: params[:client_id])
 
     # render nice_errors_path()
-    Rails.logger.debug("\n#{__method__} Trace ID: #{@trace_id}\n")
+    # Rails.logger.debug("\n#{__method__} Trace ID: #{@trace_id}\n")
 
     if params[:response_type] == "code"
       create_auth_code
@@ -38,10 +43,20 @@ class OauthController < ApplicationController
   end
 
   # POST /oauth/token
+  # @param grant_type [String] oneof "authorization_code", "client_credentials", "refresh_token"
+  # @param code [String] The auth code received from the authorization server.
+  # @param client_id [String] client_id issued to the client app during the registration process.
+  # @param client_secret [String] <optional> client_secret issued to the client during the registration process (if applicable -- only for private clients)
+  # @param code_verifier [String] The original code verifier used to generate the code challenge for PKCE.
+  # @param redirect_uri [String] The redirect URI used in the initial authorization request.
+  #
+  # @return [JSON] A JSON response containing the access token and related information. (JWT??)
   def token
-    # This action would handle the OAuth token request.
-    # It typically involves validating the client credentials and issuing an access token.
-    render json: {message: "Token endpoint"}
+    # todo: should this have a switch statement here for the various flow, or just let the Oauth::AutorizationCode service handle that?
+    Oauth::AuthorizationCode.verify_code!(**token_params)
+    access_token = Oauth::AccessToken.generate!
+
+    render json: {access_token:, token_type: "Bearer", expires_in: access_token.expires_in}, status: :success
   end
 
   # POST /introspect
@@ -95,7 +110,7 @@ class OauthController < ApplicationController
       token_endpoint: Rails.application.routes.url_helpers.token_url,
       introspection_endpoint: Rails.application.routes.url_helpers.introspect_url,
       revocation_endpoint: Rails.application.routes.url_helpers.revoke_url,
-      scopes_supported: %w[read write], # TODO flesh this out
+      scopes_supported: %w[read write], # TODO flesh this out OPEN OIDC + custom??
       response_types_supported: %w[code token id_token],
       grant_types_supported: %w[authorization_code client_credentials refresh_token],
       token_endpoint_auth_methods_supported: %w[client_secret_post],
@@ -117,6 +132,10 @@ class OauthController < ApplicationController
     )
   end
 
+  def fetch_auth_code
+    @auth_code = AuthorizationCode.find_by!(client: @client, code: token_params[:code])
+  end
+
   def redirect_to_client(**params)
     # may need to URL encode the values here (in "pair")
     query_params = params.entries.map { |pair| pair.join("=") }.join("&")
@@ -126,5 +145,16 @@ class OauthController < ApplicationController
 
   def auth_code
     @auth_code ||= AuthorizationCode.find_by(id: Rails.cache.fetch(code_cache_key))
+  end
+
+  def token_params
+    params.permit(
+      :grant_type,
+      :code,
+      :client_id,
+      :client_secret,
+      :code_verifier,
+      :redirect_uri
+    )
   end
 end

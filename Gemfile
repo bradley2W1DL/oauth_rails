@@ -14,6 +14,7 @@ gem "puma", ">= 5.0"
 gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
+gem "importmap-rails", "~> 2.2"
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 # gem "cssbundling-rails"
 gem "dartsass-rails"

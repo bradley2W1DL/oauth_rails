@@ -1,15 +1,32 @@
 <main class="container">
   <h1>Sample Client app</h1>
   <p>Test the response from the "/authorize" endpoint</p>
+  <p>Normally this would be the endoint in the client app</p>
   <hr>
 
   <% if params[:code] %>
-    <h2>Authorization Code</h2>
+    <h3>Authorization Code</h2>
     <p>
       This is returned from successful call to /authorize endpoint.<br>
       This can be exchanged for an access_token with a POST to the /token endpoint.
     </p>
     <p>Code: <code><%= params[:code] %></code></p>
     <p>State: <code><%= params[:state] %></code></p>
+
+    <div data-controller="sample-client">
+      <%= form_with url: oauth_token_path, html: { "data-sample-client-target"=>"form" } do |form| %>
+        <%= form.hidden_field :client_id, "data-sample-client-target"=>"clientId" %>
+        <%= form.hidden_field :code_verifier, "data-sample-client-target"=>"codeVerifier" %>
+        <%= form.hidden_field :grant_type, value: "authorization_code" %>
+        <%= form.hidden_field :code, value: params[:code] %>
+        <%= form.hidden_field :redirect_uri, value: sample_url %>
+        <%= form.submit "POST /token" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if params[:access_token] %>
+    <p>render the access token JWT -- response from token call</p>
+    <p>could also implement a JWT decoder in the stimulus controller</p>
   <% end %>
 </main>
