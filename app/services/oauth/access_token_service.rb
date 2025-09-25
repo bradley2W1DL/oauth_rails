@@ -15,13 +15,14 @@ module Oauth
       new(**args).generate_token
     end
 
-    def generate_token!
+    def generate_token
       # really the different grant types are just stating HOW to verify the validity of the request
       # the actual token creation beyond that is the same, right?
       # I.e. each service should :validate_request(**params) and then return a boolean or w/e
       # this service can then continue to actually building the JWT
+      validate_request!
 
-      create_access_token
+      Oauth::Jwt.generate_token(@client)
     end
 
     def validate_request!

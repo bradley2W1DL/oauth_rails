@@ -53,7 +53,7 @@ class OauthController < ApplicationController
   #
   # @return [JSON] A JSON response containing the access token and related information. (JWT??)
   def token
-    access_token = Oauth::AccessToken.generate_token!(**token_params)
+    access_token = Oauth::AccessTokenService.generate_token!(**token_params)
 
     # todo rescue from errors correctly...need to decide on an error response format (I bet it's in the spec)
 
