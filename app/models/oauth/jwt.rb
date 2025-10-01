@@ -1,3 +1,5 @@
+require "jwt"
+
 module Oauth
   class Jwt
     def initialize(payload)
@@ -7,14 +9,20 @@ module Oauth
       new(payload).access_token
     end
 
+    # @return [String] JWT access token
     def access_token
-      
+      # base64 encode header + "." + base64 encode payload; Signed w/ signature appended
+    end
+
+    def signing_key
+      Jwk.active_signing_key
     end
 
     def header
       {
         "typ": "JWT",
-        "alg": "HS256"
+        "alg": Oauth::Jwk::ALGORITHM,
+        "kid": signing_key.kid, # key_id: thumbprint of signing key (can be pulled from Oauth::Jwk instance)
       }
     end
 
