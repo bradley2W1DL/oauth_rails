@@ -1,4 +1,4 @@
 module Oauth::Errors
-  class ClientNotFound < Base
+  class ClientNotFound < BaseError
   end
 end

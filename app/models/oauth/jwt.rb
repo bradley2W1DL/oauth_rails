@@ -20,22 +20,22 @@ module Oauth
 
     def header
       {
-        "typ": "JWT",
-        "alg": Oauth::Jwk::ALGORITHM,
-        "kid": signing_key.kid, # key_id: thumbprint of signing key (can be pulled from Oauth::Jwk instance)
+        typ: "JWT",
+        alg: Oauth::Jwk::ALGORITHM,
+        kid: signing_key.kid # key_id: thumbprint of signing key (can be pulled from Oauth::Jwk instance)
       }
     end
 
     def payload
       {
-        "iss": "me_dawg",
-        "sub": "user_id of requester",
-        "aud": "resource server or api audience",
-        "exp": Time.current + 15.minutes,
-        "iat": Time.current,
-        "jti": SecureRandom.uuid,
-        "token_type": "Bearer",
-        "client_id": @client.client_id,
+        iss: "me_dawg",
+        sub: "user_id of requester",
+        aud: "resource server or api audience",
+        exp: Time.current + 15.minutes,
+        iat: Time.current,
+        jti: SecureRandom.uuid,
+        token_type: "Bearer",
+        client_id: @client.client_id
       }
     end
 

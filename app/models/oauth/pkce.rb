@@ -35,7 +35,7 @@ module Oauth
         end
       end
 
-      ### 
+      ###
       # @params :code String
       #
       # @return String

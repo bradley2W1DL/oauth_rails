@@ -2,7 +2,7 @@ module Oauth
   class AccessTokenService
     attr_reader :grant_type, :client_id, :client_secret, :code, :code_verifier, :redirect_uri
 
-    def initialize(grant_type:, client_id:, client_secret: nil, code: nil, code_verifier: nil, redirect_uri:)
+    def initialize(grant_type:, client_id:, redirect_uri:, client_secret: nil, code: nil, code_verifier: nil)
       @grant_type = grant_type
       @client_id = client_id
       @client_secret = client_secret

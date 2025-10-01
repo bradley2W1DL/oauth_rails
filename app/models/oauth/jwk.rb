@@ -22,7 +22,7 @@ module Oauth
       JWT::JWK.create_from(JSON.parse(active_jwk_json))
     end
 
-    def generate_es256_keypair 
+    def generate_es256_keypair
       jwk = JWT::JWK.new(OpenSSL::PKey::EC.generate("prime256v1"))
 
       assign_attributes(
@@ -30,7 +30,6 @@ module Oauth
         key: jwk.parameters.to_json
       )
     end
-
 
     # TODO scheduled "rotate" logic that generates a new key and then deletes any in-active key older than X time (1 month)
 
