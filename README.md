@@ -14,3 +14,7 @@ That said I do want to implement:
 
 
 ...plus, other stuff...TBD
+
+### Dev notes
+
+Ensure you have redis service install and started
