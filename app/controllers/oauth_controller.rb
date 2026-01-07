@@ -53,7 +53,8 @@ class OauthController < ApplicationController
   # @return [JSON] A JSON response containing the access token and related information. (JWT??)
   def token
     # todo: should this have a switch statement here for the various flow, or just let the Oauth::AutorizationCode service handle that?
-    Oauth::AuthorizationCode.verify_code!(**token_params)
+    puts "TOKEN PARAMS: #{token_params}"
+    Oauth::AuthorizationCode.verify_code!(**token_params.to_h.symbolize_keys)
     access_token = Oauth::AccessToken.generate!
 
     render json: {access_token:, token_type: "Bearer", expires_in: access_token.expires_in}, status: :success
