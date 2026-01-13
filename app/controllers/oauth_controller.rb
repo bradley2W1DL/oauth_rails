@@ -3,6 +3,7 @@ class OauthController < ApplicationController
 
   # handle exceptions via an included module
   rescue_from Oauth::Errors::ClientNotFound, with: :client_not_found
+  rescue_from Oauth::Errors::InvalidRequest, with: :invalid_request
 
   # GET /authorize
   # @param response_type [String] The type of response expected (e.g., "code" for authorization code flow).
@@ -52,10 +53,17 @@ class OauthController < ApplicationController
   #
   # @return [JSON] A JSON response containing the access token and related information. (JWT??)
   def token
-    # todo: should this have a switch statement here for the various flow, or just let the Oauth::AutorizationCode service handle that?
-    puts "TOKEN PARAMS: #{token_params}"
-    Oauth::AuthorizationCode.verify_code!(**token_params.to_h.symbolize_keys)
-    access_token = Oauth::AccessToken.generate!
+    access_token = nil
+
+    case token_params.grant_type
+    when "authorization_code"
+      access_token = Oauth::AuthorizationCodeFlow.new(**token_params.to_h.symbolize_keys).generate_access_token!
+    else
+      raise "Grant Type `#{token_params.grant_type}` not supported"
+    end
+    
+    # todo, don't think this is implemented anywhere...
+    # access_token = Oauth::AccessToken.generate!
 
     render json: {access_token:, token_type: "Bearer", expires_in: access_token.expires_in}, status: :success
   end
@@ -157,5 +165,13 @@ class OauthController < ApplicationController
       :code_verifier,
       :redirect_uri
     )
+  end
+
+  def invalid_request(error)
+    render json: { error: "invalid_request", message: error.message}, status: :unprocessable_entity
+  end
+
+  def client_not_found
+    render json: { error: "oauth client not found. Has it been registered?"}, status: :not_found
   end
 end
