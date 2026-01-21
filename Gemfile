@@ -17,9 +17,12 @@ gem "stimulus-rails"
 gem "importmap-rails", "~> 2.2"
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 # gem "cssbundling-rails"
+
 gem "dartsass-rails"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+# Don't _think_ I'll be using this
+# gem "jbuilder"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
@@ -46,6 +49,13 @@ gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
+
+# # #
+# Non-default Rails gems
+# # #
+
+# JSON web tokens: https://github.com/jwt/ruby-jwt
+gem "jwt"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
