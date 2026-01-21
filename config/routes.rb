@@ -24,5 +24,9 @@ Rails.application.routes.draw do
   get "introspect" => "oauth#introspect"
   post "oauth/revoke" => "oauth#revoke", :as => :oauth_revoke
 
-  get ".well-known/oauth-authorization-server" => "oauth#well_known_authorization_server", :as => :well_known_oauth_authorization_server
+  # .well-known routes
+  scope "/.well-known", controller: :well_known, defaults: { format: :json } do
+    get "oauth-authorization-server", action: :authorization_server_metadata
+    get "jwks"
+  end
 end
