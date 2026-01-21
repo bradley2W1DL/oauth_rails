@@ -11,10 +11,16 @@ That said I do want to implement:
   * Proof Key for Code Exchange
 3. Persisted user records with access and refresh tokens 
 4. FE to manage user records as an admin
+  * As well as a way to "onboard" a new client
 
 
-...plus, other stuff...TBD
+## Client usage
 
+Expose an API that allows session management; revoking sessions, etc.
 ### Dev notes
 
-Ensure you have redis service install and started
+Ensure you have redis service install and started. In my linux env redis is replaced with "valkey" (essential an open-source fork). Be sure to start the valkey service, or the trace caching feature won't work as expected.
+
+```sh
+systemctl start valkey.service
+```

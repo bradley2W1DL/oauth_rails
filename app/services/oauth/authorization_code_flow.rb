@@ -24,10 +24,19 @@ module Oauth
       verify_redirect_uri!
       verify_code!
 
-      # TODO, YOU ARE HERE need to flesh out `verify_code` and determine what happens with access code below
-  
       # todo this class doesn't exist yet! What would go into this?
-      Oauth::AccessToken.new(scopes:)
+      # those should be a JWT...tbd
+      Oauth::AccessToken.new
+    end
+
+    private
+
+    # Check that the redirect URI on the incoming request matches the URI registerd on the AuthCode initial request
+    # I mismatch here indicates a potential interception attack or similar shenanigans
+    #   - this is extra verification that SHOULD happen but doesn't really need to
+    def verify_redirect_uri!
+      # todo
+      true
     end
 
     # if PKCE code challenge is required and 
@@ -37,13 +46,16 @@ module Oauth
       begin
         @auth_code = AuthorizationCode.find_by!(client_id:, code:)
 
-        verify_authorization_code!
+        # if these don't match we need to return an "invalid_grant" error
+        Oauth::PKCE.code_challenge_match?(code_verifier, @auth_code.code_challenge)
       rescue StandardError => e
+        # should this be rescuing from RecordNotFound errors? for the AuthCode lookup?
+        #   Basically an InvalidRequest becuase of the bad code??
+        Rails.logger.debug("[ERROR] Oauth::AuthorizationCodeFlow#verify_code! => #{e.message}")
       ensure
         # ensure auth code is destroyed after it's verified (one-time-use only)
-        auth_code&.destroy
+        @auth_code&.destroy
       end
-      true
     end
 
     private

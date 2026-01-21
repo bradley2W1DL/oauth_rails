@@ -55,17 +55,22 @@ class OauthController < ApplicationController
   def token
     access_token = nil
 
-    case token_params.grant_type
+    case token_params["grant_type"]
     when "authorization_code"
-      access_token = Oauth::AuthorizationCodeFlow.new(**token_params.to_h.symbolize_keys).generate_access_token!
+      oauth_klass = Oauth::AuthorizationCodeFlow
+    when "client_credentials"
+      raise Error.new "not implemented"
+      oauth_klass = Oauth::ClientCredentialsFlow
+    when "refresh_token"
+      raise Error.new "not implemented"
+      oauth_klass = Oauth::RefreshTokenFlow 
     else
       raise "Grant Type `#{token_params.grant_type}` not supported"
     end
     
-    # todo, don't think this is implemented anywhere...
-    # access_token = Oauth::AccessToken.generate!
+    access_token = oauth_klass.new(**token_params.to_h.symbolize_keys).generate_access_token!
 
-    render json: {access_token:, token_type: "Bearer", expires_in: access_token.expires_in}, status: :success
+    render json: {access_token:, token_type: "Bearer", expires_in: "sometime"}, status: :created
   end
 
   # POST /introspect
