@@ -24,3 +24,6 @@ Ensure you have redis service install and started. In my linux env redis is repl
 ```sh
 systemctl start valkey.service
 ```
+
+Credentials encryption keys are stored in 1Password, copy these down with the `bin/fetch-env-keys` script
+_This requires that the `op` cli tool is installed and you're authenticated to correct 1Pass acct_

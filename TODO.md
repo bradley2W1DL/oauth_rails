@@ -13,6 +13,7 @@ Tracking this projects progress and features yet to implement.
 
 - [ ] Be able to fetch a JWKS (JSON Web Key Set) for public keys that can be used to verify token authenticity
 - [ ] Generate JWKs EC or RSA256 and persist the private key persisted in the database, retrievable for JWT signing
+  - [ ] Rake task to create and persist JWK with timestamps to be used for rotation/expiration
 - [ ] Implement a JWK rotation strategy to generate new keys on a time interval and return both previous and new keys
 for some period of time.
 
