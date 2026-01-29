@@ -55,7 +55,8 @@ gem "thruster", require: false
 # # #
 
 # JSON web tokens: https://github.com/jwt/ruby-jwt
-gem "jwt"
+# gem "jwt"
+gem "jwt-eddsa" # JWT extended with EdDSA algorithms
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
