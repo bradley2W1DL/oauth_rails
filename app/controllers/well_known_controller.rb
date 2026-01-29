@@ -25,12 +25,9 @@ class WellKnownController < ApplicationController
   # JSON Web Key Set (public keys for verifying JWTs)
   #   The exact URI is provided by `jwks_uri` in the discovery document
   #
-  # @returns [JSON] array of JSON Web Keys
+  # @return [JSON] array of active JSON Web Keys
   def jwks
-    render json: {
-      empty: true
-    }
-
+    render json: JsonWebKey.json_web_key_set, status: :ok
   end
 
   # OpenID Connect Provider Config

@@ -12,7 +12,7 @@ class JsonWebKey < ApplicationRecord
   def self.json_web_key_set
     keys = active.pluck(:public_jwk)
 
-    return { keys: }.to_json
+    return { keys: }.as_json
   end
 
   # Generate a new JWK and persist to database
