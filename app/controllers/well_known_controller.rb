@@ -1,6 +1,6 @@
 class WellKnownController < ApplicationController
   # public endpoints that can be used to fetch metadata about this application server
-  
+
   # /.well-known/oauth-authorization-server
   # OAuth 2.0 Authorization Server Metadata (RFC 8414)
   #   metadata about supported endpoints such as authorization_endpoint, token_endpoint, etc.
@@ -31,5 +31,6 @@ class WellKnownController < ApplicationController
   end
 
   # OpenID Connect Provider Config
-  def openid_configuration; end
+  def openid_configuration
+  end
 end

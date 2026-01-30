@@ -21,7 +21,6 @@ module Oauth
         [verifier, challenge, "S256"]
       end
 
-
       # Validates input code verifier against hashed code challenge (via supported hashing method)
       #   - Method is assumed to be S256 at this point (does this need to be validated?)
       #

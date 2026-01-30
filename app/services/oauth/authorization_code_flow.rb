@@ -5,7 +5,7 @@ module Oauth
     def initialize(client_id:, redirect_uri:, grant_type:, code: nil, code_verifier: nil, client_secret: nil)
       if grant_type != "authorization_code"
         # this request should be handled by some other service
-        raise RuntimeError.new "Invalid grant_type: #{grant_type} passed to Oauth::AuthorizationCodeFlow service"
+        raise "Invalid grant_type: #{grant_type} passed to Oauth::AuthorizationCodeFlow service"
       end
 
       if client_secret.nil? && code_verifier.nil?
@@ -16,7 +16,7 @@ module Oauth
       @code = code
       @code_verifier = code_verifier
       # if client_secret is present ensure it's a part of this query. If not, PKCE must be enforced
-      client_params = { client_id:, client_secret: }.compact
+      client_params = {client_id:, client_secret:}.compact
       @client = Client.find_by!(client_params)
     end
 
@@ -39,23 +39,21 @@ module Oauth
       true
     end
 
-    # if PKCE code challenge is required and 
+    # if PKCE code challenge is required and
     # code_verifier required if client_secret not present (SPA apps), otherwise it's a nice-to-have and should
     # be verified if present. Bad code == attempted intercept attack.
     def verify_code!
-      begin
-        @auth_code = AuthorizationCode.find_by!(client_id:, code:)
+      @auth_code = AuthorizationCode.find_by!(client_id:, code:)
 
-        # if these don't match we need to return an "invalid_grant" error
-        Oauth::PKCE.code_challenge_match?(code_verifier, @auth_code.code_challenge)
-      rescue StandardError => e
-        # should this be rescuing from RecordNotFound errors? for the AuthCode lookup?
-        #   Basically an InvalidRequest becuase of the bad code??
-        Rails.logger.debug("[ERROR] Oauth::AuthorizationCodeFlow#verify_code! => #{e.message}")
-      ensure
-        # ensure auth code is destroyed after it's verified (one-time-use only)
-        @auth_code&.destroy
-      end
+      # if these don't match we need to return an "invalid_grant" error
+      Oauth::PKCE.code_challenge_match?(code_verifier, @auth_code.code_challenge)
+    rescue => e
+      # should this be rescuing from RecordNotFound errors? for the AuthCode lookup?
+      #   Basically an InvalidRequest becuase of the bad code??
+      Rails.logger.debug("[ERROR] Oauth::AuthorizationCodeFlow#verify_code! => #{e.message}")
+    ensure
+      # ensure auth code is destroyed after it's verified (one-time-use only)
+      @auth_code&.destroy
     end
 
     private

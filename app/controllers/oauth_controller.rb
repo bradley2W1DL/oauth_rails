@@ -53,21 +53,19 @@ class OauthController < ApplicationController
   #
   # @return [JSON] A JSON response containing the access token and related information. (JWT??)
   def token
-    access_token = nil
-
     case token_params["grant_type"]
     when "authorization_code"
       oauth_klass = Oauth::AuthorizationCodeFlow
     when "client_credentials"
       raise Error.new "not implemented"
-      oauth_klass = Oauth::ClientCredentialsFlow
+      # oauth_klass = Oauth::ClientCredentialsFlow
     when "refresh_token"
       raise Error.new "not implemented"
-      oauth_klass = Oauth::RefreshTokenFlow 
+      # oauth_klass = Oauth::RefreshTokenFlow
     else
       raise "Grant Type `#{token_params.grant_type}` not supported"
     end
-    
+
     access_token = oauth_klass.new(**token_params.to_h.symbolize_keys).generate_access_token!
 
     render json: {access_token:, token_type: "Bearer", expires_in: "sometime"}, status: :created
@@ -156,10 +154,10 @@ class OauthController < ApplicationController
   end
 
   def invalid_request(error)
-    render json: { error: "invalid_request", message: error.message}, status: :unprocessable_entity
+    render json: {error: "invalid_request", message: error.message}, status: :unprocessable_entity
   end
 
   def client_not_found
-    render json: { error: "oauth client not found. Has it been registered?"}, status: :not_found
+    render json: {error: "oauth client not found. Has it been registered?"}, status: :not_found
   end
 end

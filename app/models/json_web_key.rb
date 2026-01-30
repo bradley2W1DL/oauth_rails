@@ -7,12 +7,12 @@ class JsonWebKey < ApplicationRecord
   validates :private_jwk, presence: true
 
   # Standard JWKS array that contains any "active" keys
-  # 
+  #
   # @return [JSON] keys -> Array<JWK>
   def self.json_web_key_set
     keys = active.pluck(:public_jwk)
 
-    return { keys: }.as_json
+    {keys:}.as_json
   end
 
   # Generate a new JWK and persist to database
@@ -20,7 +20,7 @@ class JsonWebKey < ApplicationRecord
   # @return [JsonWebKey] newly created key
   def self.generate
     private_key = Ed25519::SigningKey.generate
-    jwk = JWT::JWK.new(private_key, { use: "sig" })
+    jwk = JWT::JWK.new(private_key, {use: "sig"})
 
     create!(
       kid: jwk.parameters[:kid],
