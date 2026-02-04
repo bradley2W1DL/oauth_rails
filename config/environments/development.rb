@@ -18,6 +18,7 @@ Rails.application.configure do
   if Rails.root.join("tmp/caching-dev.txt").exist?
     raise "caching in dev needs to be opted-into: run `rails dev:cache` to toggle"
   end
+
   config.action_controller.perform_caching = false # do I want this?
   config.action_controller.enable_fragment_cache_logging = false # same ? (think this is view caching)
 
