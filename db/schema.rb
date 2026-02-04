@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_03_154733) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_21_055518) do
   create_table "authorization_codes", force: :cascade do |t|
     t.integer "client_id", null: false
     t.integer "user_id"
@@ -36,6 +36,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_154733) do
     t.integer "application_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "json_web_keys", force: :cascade do |t|
+    t.boolean "active", default: false
+    t.string "kid"
+    t.json "public_jwk"
+    t.json "private_jwk"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["kid"], name: "index_json_web_keys_on_kid", unique: true
   end
 
   create_table "refresh_tokens", force: :cascade do |t|

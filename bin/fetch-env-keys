@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# if `op` defined then fetch encryption keys and create correct files in config dir
+# - master.key
+# - development.key
+#
+# TODO: add some "else" debug statements here if things aren't found / op not installed
+if command -v op &> /dev/null; then
+  master_key=$(op --account my.1password.com read op://Private/oauth_rails-master.key/credential)
+  if [ -n "$master_key" ]; then
+    echo "Copying master encryption key into config/master.key 🔐"
+    printf '%s' "$master_key" > ./config/master.key
+  fi
+
+  echo ""
+
+  development_key=$(op --account my.1password.com read op://Private/oauth_rails-development.key/credential)
+  if [ -n "$development_key" ]; then
+    echo "Copying development encryption key into config/credentials/development.key 🔐"
+    printf '%s' "$development_key" > ./config/credentials/development.key
+  fi
+fi
+

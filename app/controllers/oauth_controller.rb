@@ -3,6 +3,7 @@ class OauthController < ApplicationController
 
   # handle exceptions via an included module
   rescue_from Oauth::Errors::ClientNotFound, with: :client_not_found
+  rescue_from Oauth::Errors::InvalidRequest, with: :invalid_request
 
   # GET /authorize
   # @param response_type [String] The type of response expected (e.g., "code" for authorization code flow).
@@ -52,11 +53,22 @@ class OauthController < ApplicationController
   #
   # @return [JSON] A JSON response containing the access token and related information. (JWT??)
   def token
-    # todo: should this have a switch statement here for the various flow, or just let the Oauth::AutorizationCode service handle that?
-    Oauth::AuthorizationCode.verify_code!(**token_params)
-    access_token = Oauth::AccessToken.generate!
+    case token_params["grant_type"]
+    when "authorization_code"
+      oauth_klass = Oauth::AuthorizationCodeFlow
+    when "client_credentials"
+      raise Error.new "not implemented"
+      # oauth_klass = Oauth::ClientCredentialsFlow
+    when "refresh_token"
+      raise Error.new "not implemented"
+      # oauth_klass = Oauth::RefreshTokenFlow
+    else
+      raise "Grant Type `#{token_params.grant_type}` not supported"
+    end
 
-    render json: {access_token:, token_type: "Bearer", expires_in: access_token.expires_in}, status: :success
+    access_token = oauth_klass.new(**token_params.to_h.symbolize_keys).generate_access_token!
+
+    render json: {access_token:, token_type: "Bearer", expires_in: "sometime"}, status: :created
   end
 
   # POST /introspect
@@ -101,23 +113,6 @@ class OauthController < ApplicationController
     end
   end
 
-  # GET /.well-known/oauth-authorization-server
-  # TODO THIS ENDPOINT IS BROKEN
-  def well_known_authorization_server
-    render json: {
-      issuer: Rails.application.routes.url_helpers.root_url,
-      authorization_endpoint: Rails.application.routes.url_helpers.authorize_url,
-      token_endpoint: Rails.application.routes.url_helpers.token_url,
-      introspection_endpoint: Rails.application.routes.url_helpers.introspect_url,
-      revocation_endpoint: Rails.application.routes.url_helpers.revoke_url,
-      scopes_supported: %w[read write], # TODO flesh this out OPEN OIDC + custom??
-      response_types_supported: %w[code token id_token],
-      grant_types_supported: %w[authorization_code client_credentials refresh_token],
-      token_endpoint_auth_methods_supported: %w[client_secret_post],
-      subject_types_supported: %w[public pairwise]
-    }
-  end
-
   private
 
   def create_auth_code
@@ -156,5 +151,13 @@ class OauthController < ApplicationController
       :code_verifier,
       :redirect_uri
     )
+  end
+
+  def invalid_request(error)
+    render json: {error: "invalid_request", message: error.message}, status: :unprocessable_entity
+  end
+
+  def client_not_found
+    render json: {error: "oauth client not found. Has it been registered?"}, status: :not_found
   end
 end

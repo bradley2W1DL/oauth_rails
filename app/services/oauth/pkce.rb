@@ -11,7 +11,6 @@ module Oauth
   class Pkce
     LENGTH = 50 # arbitrary
     class << self
-      # # #
       # Generate a random code_verifier string / code_challenge (SHA256) encoded
       #
       # @return [verifier String, challenge String, challenge_method String]
@@ -20,6 +19,18 @@ module Oauth
         challenge = Base64.urlsafe_encode64(Digest::SHA256.hexdigest(verifier))
 
         [verifier, challenge, "S256"]
+      end
+
+      # Validates input code verifier against hashed code challenge (via supported hashing method)
+      #   - Method is assumed to be S256 at this point (does this need to be validated?)
+      #
+      # @param client_verifier [String] code verifier passed in token request
+      # @param challenge [String] hashed verifier provide by client during "authorize" request (stored on AuthorizationCode)
+      # @return [Boolean]
+      def code_challenge_match?(client_verifier, challenge)
+        hashed_verifier = Base64.urlsafe_encode64(Digest::SHA256.hexdigest(client_verifier))
+
+        hashed_verifier == challenge
       end
     end
   end

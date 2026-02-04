@@ -8,3 +8,5 @@ tmp/
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+/config/credentials/development.key

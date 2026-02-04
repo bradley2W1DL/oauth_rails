@@ -8,13 +8,12 @@ class User < ApplicationRecord
 
   scope :with_active_session, -> { joins(:sessions).where("user_sessions.expires_at > ?", Time.current) }
 
+  # @param factor <String> email, username value
+  # @return User instance
+  # @throw ActiveRecord::RecordNotFound if no user found
+  # @throw ActiveRecord::SoleRecordExceeded if more than one user found
   def self.find_by_factor(factor)
-    # username or password for the time being
-    # throw an error if more than one found
-    users = where("username = :factor OR email = :factor", factor:)
-    raise ActiveRecord::RecordNotFound, "Multiple users found" if users.size > 1
-
-    users.last
+    find_sole_by("username = :factor OR email = :factor", factor:)
   end
 
   # TODO this method not working
