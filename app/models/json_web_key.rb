@@ -1,6 +1,8 @@
 class JsonWebKey < ApplicationRecord
   encrypts :private_jwk
 
+  ALGORITHM = "EdDSA".freeze # Edwards-curve Digital Signature Algorithm
+
   scope :active, -> { where(active: true) }
 
   validates :kid, presence: true, uniqueness: true
@@ -28,5 +30,9 @@ class JsonWebKey < ApplicationRecord
       private_jwk: jwk.export(include_private: true),
       active: true
     )
+  end
+
+  def self.current
+    active.order(:created_at).last
   end
 end

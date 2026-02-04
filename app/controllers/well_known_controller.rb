@@ -32,5 +32,6 @@ class WellKnownController < ApplicationController
 
   # OpenID Connect Provider Config
   def openid_configuration
+    # todo
   end
 end

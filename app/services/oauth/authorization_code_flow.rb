@@ -1,6 +1,6 @@
 module Oauth
-  class AuthorizationCodeFlow
-    attr_reader :redirect_uri, :code, :code_verifier, :client
+  class AuthorizationCodeFlow < OauthBase
+    attr_reader :redirect_uri, :code, :code_verifier, :client, :grant_type
 
     def initialize(client_id:, redirect_uri:, grant_type:, code: nil, code_verifier: nil, client_secret: nil)
       if grant_type != "authorization_code"
@@ -15,6 +15,7 @@ module Oauth
 
       @code = code
       @code_verifier = code_verifier
+      @grant_type = grant_type
       # if client_secret is present ensure it's a part of this query. If not, PKCE must be enforced
       client_params = {client_id:, client_secret:}.compact
       @client = Client.find_by!(client_params)
@@ -24,9 +25,10 @@ module Oauth
       verify_redirect_uri!
       verify_code!
 
-      # todo this class doesn't exist yet! What would go into this?
-      # those should be a JWT...tbd
-      Oauth::AccessToken.new
+      Oauth::AccessToken.new(client_id: client.client_id, subject: @auth_code.user, scopes: @auth_code.scopes).mint_and_sign!
+    ensure
+      # ensure auth code is destroyed after it's verified (one-time-use only)
+      @auth_code&.destroy
     end
 
     private
@@ -36,6 +38,12 @@ module Oauth
     #   - this is extra verification that SHOULD happen but doesn't really need to
     def verify_redirect_uri!
       # todo
+
+      true
+    end
+
+    # TODO do we also need to verify :resource (not implemented)
+    def verify_resource!
       true
     end
 
@@ -51,11 +59,6 @@ module Oauth
       # should this be rescuing from RecordNotFound errors? for the AuthCode lookup?
       #   Basically an InvalidRequest becuase of the bad code??
       Rails.logger.debug("[ERROR] Oauth::AuthorizationCodeFlow#verify_code! => #{e.message}")
-    ensure
-      # ensure auth code is destroyed after it's verified (one-time-use only)
-      @auth_code&.destroy
     end
-
-    private
   end
 end

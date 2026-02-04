@@ -17,7 +17,7 @@ That said I do want to implement:
 ## Client usage
 
 Expose an API that allows session management; revoking sessions, etc.
-### Dev notes
+### Local Dev notes
 
 Ensure you have redis service install and started. In my linux env redis is replaced with "valkey" (essential an open-source fork). Be sure to start the valkey service, or the trace caching feature won't work as expected.
 
