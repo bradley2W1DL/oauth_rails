@@ -36,3 +36,20 @@ class JsonWebKey < ApplicationRecord
     active.order(:created_at).last
   end
 end
+
+# == Schema Information
+#
+# Table name: json_web_keys
+#
+#  id          :integer          not null, primary key
+#  active      :boolean          default(FALSE)
+#  kid         :string
+#  private_jwk :json
+#  public_jwk  :json
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+# Indexes
+#
+#  index_json_web_keys_on_kid  (kid) UNIQUE
+#

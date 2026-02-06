@@ -23,3 +23,25 @@ class UserConsent < ApplicationRecord
     where(sql, scopes.to_json)
   end
 end
+
+# == Schema Information
+#
+# Table name: user_consents
+#
+#  id         :integer          not null, primary key
+#  scopes     :json
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  client_id  :integer          not null
+#  user_id    :integer          not null
+#
+# Indexes
+#
+#  index_user_consents_on_client_id  (client_id)
+#  index_user_consents_on_user_id    (user_id)
+#
+# Foreign Keys
+#
+#  client_id  (client_id => clients.id)
+#  user_id    (user_id => users.id)
+#

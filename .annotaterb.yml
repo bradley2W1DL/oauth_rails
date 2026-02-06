@@ -14,7 +14,7 @@
 :force: false
 :format_markdown: false
 :format_rdoc: false
-:format_yard: true
+:format_yard: false
 :frozen: false
 :grouped_polymorphic: true
 :ignore_model_sub_dir: false
