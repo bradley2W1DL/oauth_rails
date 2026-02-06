@@ -1,4 +1,6 @@
 class Client < ApplicationRecord
+  encrypts :client_secret
+
   before_create :generate_id_and_secret
 
   enum :application_type, {
