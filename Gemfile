@@ -66,7 +66,7 @@ group :development, :test do
   # use StandardRB for linting
   gem "standard"
 
-  # gem "annotaterb"
+  gem "annotaterb"
 end
 
 group :test do
