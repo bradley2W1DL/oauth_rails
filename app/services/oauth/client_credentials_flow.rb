@@ -8,7 +8,7 @@ module Oauth
       super(grant_type:)
 
       if client_id.nil? || client_secret.nil?
-        raise Errors::InvalidRequest.new(error: "invalid_request", message: "client_id and client_secret required for the 'client_credentials' flow")
+        raise Errors::InvalidRequest.new(message: "client_id and client_secret required for the 'client_credentials' flow")
       end
 
       @client = Client.find_by(client_id:)
@@ -21,7 +21,7 @@ module Oauth
 
     def generate_access_token!
       if client_secret != client.client_secret
-        raise Errors::InvalidRequest.new(error: "invalid_request", message: "Invalid client_id or client_secret")
+        raise Errors::InvalidRequest.new(message: "Invalid client_id or client_secret")
       end
 
       Oauth::AccessToken.new(client_id:, subject: client, scopes:)

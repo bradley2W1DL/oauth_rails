@@ -44,14 +44,16 @@ RSpec.describe Oauth::OauthBase, type: :service do
       let(:parent_class) do
         Class.new(described_class) do
           self.klass_grant_type = :authorization_code
-          def generate_access_token!; end
+          def generate_access_token!
+          end
         end
       end
 
       let(:child_class) do
         Class.new(parent_class) do
           self.klass_grant_type = :client_credentials
-          def generate_access_token!; end
+          def generate_access_token!
+          end
         end
       end
 

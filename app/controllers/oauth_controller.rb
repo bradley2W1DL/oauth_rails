@@ -57,8 +57,7 @@ class OauthController < ApplicationController
     when "authorization_code"
       oauth_klass = Oauth::AuthorizationCodeFlow
     when "client_credentials"
-      raise Error.new "not implemented"
-      # oauth_klass = Oauth::ClientCredentialsFlow
+      oauth_klass = Oauth::ClientCredentialsFlow
     when "refresh_token"
       raise Error.new "not implemented"
       # oauth_klass = Oauth::RefreshTokenFlow
