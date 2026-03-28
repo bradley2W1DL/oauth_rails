@@ -21,8 +21,9 @@ Tracking this projects progress and features yet to implement.
 ## Authorization Code Grant types
 
 - [x] authorization_code
-- [ ] client_credentials
-  - (this might be a direct post to the token endpoint)
+  - [ ] Implement redirect_uri verification. May require accessing request context in some way.
+- [x] client_credentials
+  - (this is a direct post to the token endpoint)
 - [ ] refresh_token
   - This needs to include adding a refresh token to minted access tokens; conditional based on "scopes" arg.
 
